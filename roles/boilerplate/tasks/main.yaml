@@ -1,0 +1,50 @@
+---
+- name: Install some apt packages  
+  apt:
+      pkg={{ item }}
+      state=latest
+      update_cache=yes
+  with_items:
+      - pkgname
+
+- name: Create a directory
+  file:
+      path=/path/to/directory
+      state=directory
+      owner={{ ansible_ssh_user }}
+      group={{ ansible_ssh_user }}
+
+- name: Run a shell command
+  command: >
+    ls
+    -al
+    > foo.txt
+  args:
+      creates: foo.txt
+
+- name: Copy a file from the role's files dir
+  copy:
+      src=bar.txt
+      dest=bar.txt
+
+- name: reload a service
+  service:
+      name=servicename
+      state=reloaded
+
+- name: Clone a repository
+  git:
+      repo='https://github.com/user/repo.git'
+      dest='/path/to/checkout'
+      accept_hostkey=yes
+
+- name: Install an egg to a virtualenv
+  pip:
+    virtualenv=/path/to/venv
+    name="-e git_https://github/com/user/repo@commit#egg=eggname"
+
+- name: Create a cronjob
+  cron:
+    special_time=reboot
+    user="username"
+    job="ls /"
